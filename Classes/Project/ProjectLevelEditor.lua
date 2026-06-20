@@ -43,6 +43,11 @@ function ProjectLevelEditor:build_menu(menu, data)
     menu:combobox("AiGroupType", up, aitype, table.get_key(aitype, data.ai_group_type) or 1)
 
     local styles = table.map_keys(tweak_data.scene_poses.player_style)
+    for i, v in ipairs(styles) do
+        if v == "generic" then
+            table.remove(styles, i)
+        end
+    end
     menu:combobox("PlayerStyle", up, styles, table.get_key(styles, data.player_style or "generic") or data.player_style, {
         help = "Set the player style for the map, make sure the packages for the suits are loaded!", free_typing = true
     })
