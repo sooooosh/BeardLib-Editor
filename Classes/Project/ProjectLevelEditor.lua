@@ -48,7 +48,8 @@ function ProjectLevelEditor:build_menu(menu, data)
             table.remove(styles, i)
         end
     end
-    menu:combobox("PlayerStyle", up, styles, table.get_key(styles, data.player_style or "generic") or data.player_style, {
+    table.insert(styles, "none")
+    menu:combobox("PlayerStyle", up, styles, table.get_key(styles, data.player_style or "none") or data.player_style, {
         help = "Set the player style for the map, make sure the packages for the suits are loaded!", free_typing = true
     })
     menu:tickbox("TeamAiOff", up, data.team_ai_off)
@@ -361,6 +362,9 @@ function ProjectLevelEditor:set_data_callback()
 
     data.ai_group_type = self:GetItem("AiGroupType"):SelectedItem()
     data.player_style = self:GetItem("PlayerStyle"):SelectedItem()
+    if data.player_style == "none" then
+        data.player_style = nil
+    end
     data.briefing_dialog = self:GetItem("BriefingDialog"):Value()
     data.ghost_bonus = self:GetItem("GhostBonus"):Value()
     if data.ghost_bonus == 0 then
