@@ -22,7 +22,7 @@ Utils.EditorIcons = {
 	help = {192, 64, 56, 56},
 	info = {256, 64, 56, 56},
 	spinner = {320, 64, 64, 64},
-	
+
 	grid = {2, 194, 28, 28},
 	snap_rotation = {32, 192, 32, 32},
 	move_widget = {64, 192, 32, 32},
@@ -35,7 +35,7 @@ Utils.EditorIcons = {
 	teleport_selection = {320, 192, 32, 32},
 	teleport = {353, 192, 31, 32},
 	deselect = {384, 192, 32, 32},
-	
+
 	arrow_up = {0, 256, 32, 32},
     arrow_down = {32, 256, 32, 32},
     arrow_left = {64, 256, 32, 32},
@@ -52,7 +52,7 @@ Utils.EditorIcons = {
 	copy = {416, 256, 32, 32},
     paste = {448, 256, 32, 32},
     round_number = {480, 256, 32, 32},
-	
+
 	grab = {0, 288, 32, 32},
 	eye = {32, 288, 32, 32},
 	invisible = {64, 288, 32, 32},
@@ -69,7 +69,7 @@ Utils.EditorIcons = {
 	jump_cam = {416, 288, 32, 32},
 	star = {448, 288, 32, 32},
 	sweden = {480, 288, 32, 32},
-    
+
 	reload_double = {0, 320, 32, 32},
 	reload = {32, 320, 32, 32},
 	reload_unit = {64, 320, 32, 320},
@@ -79,7 +79,7 @@ Utils.EditorIcons = {
 	document = {192, 320, 32, 32},
 	external = {224, 320, 32, 32},
 	waypoint = {256, 320, 32, 32},
-	
+
 	placeholder = {448, 448, 64, 64}
 }
 
@@ -377,16 +377,16 @@ function Utils:ParseXmlFromAssets(typ, path, scriptdata, assets_dir)
 end
 
 function Utils:ParseXml(typ, path, scriptdata)
-    if not blt.asset_db.has_file(path, typ) then
+    if not DB:has(path, typ) then
         local asset = BeardLibFileManager:Get(typ, path)
         if asset and FileIO:Exists(asset.file) then
             return SystemFS:parse_xml(asset.file, "r")
         end
     else
         if scriptdata then
-            return FileIO:ConvertScriptData(blt.asset_db.read_file(path, typ), "binary")
+            return FileIO:ConvertScriptData(DB:open(path, typ), "binary")
         else
-            return Node.from_xml(blt.asset_db.read_file(path, typ))
+            return Node.from_xml(DB:open(path, typ))
         end
     end
 end
@@ -495,7 +495,7 @@ function Utils:GetAllLights()
 		for _,light in ipairs( unit:get_objects_by_type( Idstring( "light" ) ) ) do
 			table.insert( lights, light )
 		end
-	end	
+	end
 	return lights
 end
 
@@ -674,7 +674,7 @@ function Utils:SaveUnitDataTable(data, script_data_type)
     if not BLE.Options:GetValue("Map/OptimizedFileSaving") or not data then
         return
     end
-    
+
     for _, unit in ipairs(data) do
         local ud = unit.unit_data
         if ud then
@@ -818,7 +818,7 @@ function Utils:InSlot(unit, slot)
                 return true
             end
         end
-    end        
+    end
     return false
 end
 
@@ -908,7 +908,7 @@ function Utils:GetUnitType(unit)
         return Idstring("none")
 	end
     local ud = PackageManager:unit_data(Idstring(unit):id())
-    return ud and ud:type() 
+    return ud and ud:type()
 end
 
 function Utils:Unhash(ids, type)
@@ -964,14 +964,14 @@ function Utils:ReloadAssets(files, clbk)
         for _, asset in ipairs(files) do
             if asset.file then
                 BeardLib.Managers.File:AddFile(asset.type, asset.path, asset.file)
-                
+
                 if asset.type == uid then
                     table.insert(units, asset.path)
                 end
                 reloaded_assets = reloaded_assets + 1
             end
         end
-        
+
         for _, unit in ipairs(units) do
             PackageManager:reload(uid, unit)
             managers.sequence:reload(unit, true)
@@ -980,7 +980,7 @@ function Utils:ReloadAssets(files, clbk)
         if clbk then
             clbk()
         end
-        
+
         managers.editor:status_message("Successfully reloaded "..reloaded_assets.." assets")
     end, true)
 end

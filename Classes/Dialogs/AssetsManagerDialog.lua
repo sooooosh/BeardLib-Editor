@@ -275,7 +275,7 @@ function AssetsManagerDialog:toggle_used()
         local mod, data = project:get_mod_and_config()
         local level = project:current_level()
         local add = project:read_xml(level._add_path) or {_meta = "add", directory = "assets"}
-    
+
         for k,v in ipairs(add) do
             if v.path == name then
                 v.used = used
@@ -387,7 +387,7 @@ function AssetsManagerDialog:clean_add_xml()
 end
 
 function AssetsManagerDialog:db_has_asset(ext, asset)
-    return blt.asset_db.has_file(asset, ext)
+    return DB:has(asset, ext)
 end
 
 function AssetsManagerDialog:quick_load_from_db(ext, asset, clbk, exclude, extra_info)
@@ -459,7 +459,7 @@ function AssetsManagerDialog:_load_from_db(config, inc_in_proj, dontask, failed_
                         table.insert(to_copy, {path = name, type = typ})
                     end
                     for _, as in pairs(to_copy) do
-                        local read_data = blt.asset_db.read_file(as.path, as.type)
+                        local read_data = DB:open(as.path, as.type)
                         FileIO:WriteTo(Path:Combine(assets_dir, as.path.."."..as.type), read_data)
                     end
                 end
@@ -653,7 +653,7 @@ function AssetsManagerDialog:_make_package_report(package)
 
             pos = pos + Vector3(bsr, 0, 0)
 
-            
+
             if math.fmod(i, prow) == 0 then
                 c_rad = bsr * 2
 

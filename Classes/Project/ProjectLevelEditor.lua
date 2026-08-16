@@ -229,9 +229,9 @@ function ProjectLevelEditor:clone_level(create_data)
         typ = typ or name
         local data
         local inner_path = Path:Combine(level_dir, name)
-        if blt.asset_db.has_file(inner_path, typ) then
+        if DB:has(inner_path, typ) then
             local success = pcall(function()
-                data = blt.asset_db.read_file(inner_path, typ)
+                data = DB:open(inner_path, typ)
                 local levelless_path = inner_path:gsub(level_dir, "")
                 FileIO:WriteTo(Path:Combine(custom_level_dir, levelless_path.."."..typ), data)
                 table.insert(local_add, {_meta = typ, path = levelless_path, script_data_type = not not_sd and "binary" or nil})

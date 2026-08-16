@@ -27,7 +27,7 @@ function Utils:init(config)
     if config.fallback_to_db_assets then
         self._fallback_to_db_assets = true
     end
-    
+
     self._load_settings = BLE.Options:GetValue("Map/AssetLoadSettings")
 end
 
@@ -77,7 +77,7 @@ function Utils:AssetExists(ext, path, lang)
         end
     end
 
-    return blt.asset_db.has_file(path, ext, {language = lang}), FROM_DB
+    return DB:has(path, ext, {language = lang}), FROM_DB
 end
 
 function Utils:ParseXml(ext, path, scriptdata)
@@ -214,7 +214,7 @@ function Utils:ReadUnit(unit, config, exclude, extra_info)
                     end
                 end
             end
-        end       
+        end
 	end
 	return node ~= nil
 end
@@ -262,7 +262,7 @@ function Utils:ReadAnimationStateMachine(path, config, exclude, extra_info)
     self:Add(config, "animation_state_machine", path, exclude, extra_info)
 	local node = self:ParseXml("animation_state_machine", path)
     if node then
-        for anim_child in node:children() do    
+        for anim_child in node:children() do
             if anim_child:name() == "states" then
                 self:ReadAnimationStates(anim_child:parameter("file"), config, exclude, {file = path..".animation_state_machine", where = "states node"})
             end
@@ -376,7 +376,7 @@ function Utils:ReadEffect(path, config, exclude, extra_info)
                 if not self:ReadEffect(eff_child:parameter("name"), config, exclude, {file = file_ext, where = "use node"}) and rom then
                     return false
                 end
-            end 
+            end
         end
     end
     return node ~= nil

@@ -91,7 +91,7 @@ function MaterialEditor:enable()
 	self:_load_shader_dropdown()
 end
 
-function MaterialEditor:ToggleGUI() 
+function MaterialEditor:ToggleGUI()
 	self._menu:SetVisible(not self._menu:Visible())
  end
 
@@ -103,7 +103,7 @@ function MaterialEditor:on_close_material()
 		self._configs_notebook:RemovePageWithItem(cur:panel())
 		cur:close()
 		table.delete(self._configs, cur)
-		
+
 		self:on_config_changed(self:current_material_index())
 	end
 
@@ -177,7 +177,7 @@ function MaterialEditor:create_main_frame()
 	help:tb_btn("How-To-UseGuide", SimpleClbk(os.execute, 'start "" "https://wiki.modworkshop.net/books/beardlib-editor-tutorials/page/material-config-editor"'))
 	help:tb_btn("ProblemSolver", SimpleClbk(os.execute, 'start "" "https://www.payday2maps.net/totallynotasecretpage/"'))
 
-	self._configs_notebook = self:notebook("MaterialConfigs", {page_changed = ClassClbk(self, "on_config_changed"), offset = 4, scrollbar = true, auto_height = false, stretch_to_bottom = true}) 
+	self._configs_notebook = self:notebook("MaterialConfigs", {page_changed = ClassClbk(self, "on_config_changed"), offset = 4, scrollbar = true, auto_height = false, stretch_to_bottom = true})
 end
 
 
@@ -430,8 +430,8 @@ function MaterialEditor:_load_shader_dropdown()
 	self._compilable_shaders = {}
 	self._shader_defines = {}
 	self._template_params = {}
-	if blt.asset_db.has_file(self.RENDER_TEMPLATE_DATABASE_PATH, "render_template_database") then
-		local database = blt.asset_db.read_file(self.RENDER_TEMPLATE_DATABASE_PATH, "render_template_database")
+	if DB:has(self.RENDER_TEMPLATE_DATABASE_PATH, "render_template_database") then
+		local database = DB:open(self.RENDER_TEMPLATE_DATABASE_PATH, "render_template_database")
 		database = database and ScriptSerializer:from_custom_xml(database)
 		if database and database.render_templates then
 			for _, template in ipairs(database.render_templates) do
